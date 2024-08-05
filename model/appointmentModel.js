@@ -70,8 +70,15 @@ export async function updateAppointment(appId, updatedAppointment) {
   }
 }
 
-export function deleteAppointment(index) {
-  Appointments.splice(index, 1);
+export async function deleteAppointment(appId) {
+  try {
+    const response = await fetch(`${backendUrl}/${appId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Failed to delete appointment");
+  } catch (error) {
+    console.error("catch error"+error);
+  }
 }
 
 export function validateAppointment(appointment) {

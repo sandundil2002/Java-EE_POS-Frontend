@@ -108,6 +108,7 @@ $("#appo-update").click(async function () {
 
   if (index !== -1) {
     const updatedAppointment = {
+      appId: appId,
       admId: $("#app-admin-id").val(),
       cusName: $("#app-cus-name").val(),
       cusMobile: $("#app-cus-mobile").val(),
@@ -165,10 +166,10 @@ $("#appo-search").click(async function () {
   }
 });
 
-$("#appo-delete").click(function () {
+$("#appo-delete").click(async function () {
   const appId = $("#app-id").val();
 
-  const index = getAllAppointments().findIndex(
+  const index = (await getAllAppointments()).findIndex(
     (appointment) => appointment.appId === appId
   );
 
@@ -179,12 +180,13 @@ $("#appo-delete").click(function () {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        deleteAppointment(index);
+        await deleteAppointment(appId);
         const tbody = $("#app-tbl");
         tbody.empty();
-        loadAllAppointments(getAllAppointments());
+        const appointments = await getAllAppointments();
+        loadAllAppointments(appointments);
         swal("Confirmation! Your appointment has been deleted!", {
           icon: "success",
         });
