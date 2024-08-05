@@ -9,17 +9,25 @@ import {
 $(document).ready(async function () {
   const appointments = await getAllAppointments();
   loadAllAppointments(appointments);
+  setAppointmentID();
 });
 
 function generateAppointmentID() {
-  let lastID = $("#app-id").val();
+  const tbody = $("#app-tbl");
+  const rows = tbody.find("tr");
+  let lastID = "A000";
 
-  if (!lastID) {
-    lastID = "A000";
-  }
+  rows.each(function () {
+    const idCell = $(this).find("td").eq(0).text();
+    if (idCell.startsWith("A")) {
+      const currentID = idCell.slice(1);
+      if (parseInt(currentID) > parseInt(lastID.slice(1))) {
+        lastID = idCell;
+      }
+    }
+  });
 
   let newID = "A" + (parseInt(lastID.slice(1)) + 1).toString().padStart(3, "0");
-  localStorage.setItem("lastAppID", newID);
   return newID;
 }
 
@@ -125,7 +133,6 @@ $("#appo-update").click(async function () {
       }).then(async (willUpdate) => {
         if (willUpdate) {
           await updateAppointment(appId, updatedAppointment);
-          updateTable(index, updatedAppointment);
           swal("Confirmation! Your appointment details have been updated!", {
             icon: "success",
           });
@@ -136,17 +143,6 @@ $("#appo-update").click(async function () {
     swal("Information!", "Appointment Not Found!", "info");
   }
 });
-
-function updateTable(index, updatedAppointment) {
-  const tableBody = $("#app-tbl");
-  const row = tableBody.find("tr").eq(index);
-
-  row.find("td").eq(0).text(updatedAppointment.appId);
-  row.find("td").eq(1).text(updatedAppointment.adminId);
-  row.find("td").eq(2).text(updatedAppointment.name);
-  row.find("td").eq(3).text(updatedAppointment.mobile);
-  row.find("td").eq(4).text(updatedAppointment.dateTime);
-}
 
 $("#appo-search").click(async function () {
   const appId = $("#app-id").val();

@@ -48,7 +48,6 @@ export async function getAllAppointments() {
 
 export async function updateAppointment(appId, updatedAppointment) {
   try {
-    console.log(JSON.stringify(updatedAppointment));
     const response = await fetch(`${backendUrl}/${appId}`, {
       method: "PUT",
       headers: {
@@ -65,7 +64,7 @@ export async function updateAppointment(appId, updatedAppointment) {
     const appointment = await response.json();
     return appointment;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     throw error;
   }
 }
@@ -85,7 +84,7 @@ export function validateAppointment(appointment) {
   const appIdPattern = /^A\d{3}$/;
   const adminIdPattern = /^[A-Za-z0-9-]+$/;
   const namePattern = /^[A-Za-z\s]+$/;
-  const mobilePattern = /^\d{9}$/;
+  const mobilePattern = /^\d{10}$/;
   const dateTimePatten = /^\d{4}/;
 
   const isAppIdValid = appIdPattern.test(appointment.appId);
