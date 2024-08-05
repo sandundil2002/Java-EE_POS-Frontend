@@ -78,7 +78,7 @@ function reloadTable(appointmentArray) {
   );
 }
 
-$("#appo-add").click(function () {
+$("#appo-add").click(async function () {
   const appointmentArray = [
     $("#app-id").val(),
     $("#app-admin-id").val(),
@@ -87,9 +87,11 @@ $("#appo-add").click(function () {
     $("#app-date-time").val(),
   ];
 
-  const [appId, adminId, name, mobile, dateTime] = appointmentArray;
+  const [appId, admId, cusName, cusMobile, dateTime] = appointmentArray;
+  console.log(appointmentArray);
+
   if (checkValidation()) {
-    addAppointment(appId, adminId, name, mobile, dateTime);
+    await addAppointment(appId, admId, cusName, cusMobile, dateTime);
     reloadTable(appointmentArray);
     setAppointmentID();
     swal("Confirmation!", "New Appointment Added Successful!", "success");
@@ -196,9 +198,9 @@ $("#appo-delete").click(function () {
 function checkValidation() {
   const appointment = {
     appId: $("#app-id").val(),
-    adminId: $("#app-admin-id").val(),
-    name: $("#app-cus-name").val(),
-    mobile: $("#app-cus-mobile").val(),
+    admId: $("#app-admin-id").val(),
+    cusName: $("#app-cus-name").val(),
+    cusMobile: $("#app-cus-mobile").val(),
     dateTime: $("#app-date-time").val(),
   };
 

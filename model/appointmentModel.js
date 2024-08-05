@@ -1,18 +1,40 @@
-import { Appointments } from "../db/db.js";
+const backendUrl =
+  "http://localhost:8080/Elite_Real_Estate_POS_Backend_war_exploded/appointment";
+
+export async function addAppointment(
+  appId,
+  admId,
+  cusName,
+  cusMobile,
+  dateTime
+) {
+  const newAppointment = {
+    appId: appId,
+    admId: admId,
+    cusName: cusName,
+    cusMobile: cusMobile,
+    dateTime: dateTime,
+  };
+
+  try {
+    const response = await fetch(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAppointment),
+    });
+
+    if (!response.ok) throw new Error("Failed to add appointment");
+    const appointment = await response.json();
+    return appointment;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export function getAllAppointments() {
   return Appointments;
-}
-
-export function addAppointment(appId, adminId, name, mobile, dateTime) {
-  const newAppointment = {
-    appId: appId,
-    adminId: adminId,
-    name: name,
-    mobile: mobile,
-    dateTime: dateTime,
-  };
-  Appointments.push(newAppointment);
 }
 
 export function updateAppointment(index, updatedAppointment) {
@@ -31,9 +53,9 @@ export function validateAppointment(appointment) {
   const dateTimePatten = /^\d{4}/;
 
   const isAppIdValid = appIdPattern.test(appointment.appId);
-  const isAdminIdValid = adminIdPattern.test(appointment.adminId);
-  const isNameValid = namePattern.test(appointment.name);
-  const isMobileValid = mobilePattern.test(appointment.mobile);
+  const isAdminIdValid = adminIdPattern.test(appointment.admId);
+  const isNameValid = namePattern.test(appointment.cusName);
+  const isMobileValid = mobilePattern.test(appointment.cusMobile);
   const isDateTime = dateTimePatten.test(appointment.dateTime);
 
   if (!isAppIdValid) {
