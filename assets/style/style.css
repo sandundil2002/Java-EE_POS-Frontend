@@ -1,0 +1,468 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    background-color: rgb(221, 197, 221);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    width: 100%;
+}
+
+.nav-keys:hover {
+    cursor: pointer;
+}
+
+.navbar #logo {
+    color: #fff;
+}
+
+#logo:hover {
+    color: burlywood;
+    cursor: default;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.navbar .nav-links li {
+    margin-left: 20px;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar .nav-links a:hover {
+    color: burlywood;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    height: 4px;
+    width: 25px;
+    background: #fff;
+    margin: 2.5px 0px;
+    border-radius: 10px;
+}
+
+#datetime-container {
+    margin-top: 8.4%;
+    text-align: center;
+}
+
+#date-lbl {
+    font-style: italic;
+}
+
+#welcome-admin {
+    font-family: "Poetsen One", sans-serif;
+}
+
+#chart-title {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 3.8%;
+}
+
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    border: 3px solid #ccc;
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+.bar {
+    background-color: #e08a8a;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: 100%;
+    color: #333;
+    font-weight: bold;
+}
+
+.chart-titles {
+    color: black;
+    font-style: italic;
+}
+
+#appointment-lbl {
+    display: flex;
+    gap: 1%;
+}
+
+.top-lables {
+    border: 1px solid black;
+    background-color: #ccc;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+}
+
+#appointment-title {
+    text-align: center;
+    font-weight: 500;
+}
+
+#appointment-data {
+    margin-left: 1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: center;
+    border: 1px solid black;
+}
+
+#appointment-data thead th {
+    background-color: #ccc;
+    color: black;
+    width: 25%;
+    font-style: italic;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #e3ecf5;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #cdd6df;
+}
+
+#dashboard-body {
+    width: 100%;
+    padding-left: 1%;
+}
+
+/*-----------------------------Appointment Section-----------------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Caveat:wght@400..700&family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap');
+
+#appointment-section {
+    padding-top: 5%;
+    width: 100%;
+    text-align: center;
+}
+
+#customer-section {
+    padding-top: 5%;
+}
+
+#agent-section {
+    padding-top: 5%;
+}
+
+#property-section {
+    padding-top: 5%;
+}
+
+#payment-section {
+    padding-top: 5%;
+}
+
+#appointment-frame {
+    display: flex;
+}
+
+#dashboard-appointment {
+    padding-left: 2%;
+    padding-right: 2%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    background-color: #ddabab;
+    height: auto;
+}
+
+.section-title {
+    font-family: "Poppins", sans-serif;
+}
+
+#appointment-topbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.id {
+    border: 1px solid black;
+    border-radius: 25px;
+    text-align: center;
+    background-color: #e3ecf5;
+}
+
+.id:hover {
+    background-color: #cdd6df;
+}
+
+#input-fields {
+    padding-left: 2%;
+    padding-right: 2%;
+    gap: 3%;
+}
+
+.combo-box {
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #e3ecf5;
+}
+
+.combo-box:hover {
+    background-color: #cdd6df;
+}
+
+#table-manage {
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    border-collapse: collapse;
+}
+
+#table-thead tr {
+    background-color: #ddabab;
+}
+
+#table-thead th {
+    color: black;
+    width: 16.67%;
+    font-style: italic;
+}
+
+#pro-table-thead tr {
+    background-color: #ddabab;
+}
+
+#pro-table-thead th {
+    color: black;
+    width: 14.2%;
+    font-style: italic;
+}
+
+#crud-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.crud-btn {
+    border: 1px solid;
+    border-radius: 7px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+.crud-btn:hover {
+    background-color: #0069d9;
+}
+
+.crud-btn:active {
+    transform: scale(0.95);
+}
+
+.status-combo {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    text-align: center;
+}
+
+.status-combo .pending {
+    background-color: #ffeb3b;
+}
+
+.status-combo .complete {
+    background-color: #4caf50;
+}
+
+.status-combo .cancel {
+    background-color: #f44336;
+}
+
+.status-combo:hover {
+    background-color: #218838;
+}
+
+#section-topbar {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*---------------------------------Payment section------------------------------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Caveat:wght@400..700&family=Inter:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap');
+
+#payment-section {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+#payment-container {
+    width: 100%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.payment-fields-container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 25%;
+    column-gap: 10%;
+}
+
+.payment-fields-container input {
+    width: 100%;
+}
+
+.payment-fields-container select {
+    width: 100%;
+}
+
+#payment-method {
+    margin-left: 50%;
+}
+
+.payment-bill {
+    border: none;
+    background-color: #e08a8a;
+    border-radius: 5px;
+    margin-left: 1%;
+    padding: 1%;
+}
+
+#bill-topbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+#company-details h5 {
+    font-family: "Montserrat";
+    font-weight: bold;
+}
+
+#company-details {
+    text-align: left;
+}
+
+#bill-to-container {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    background-color: #ddabab;
+    padding: 2%;
+    border-radius: 5px;
+}
+
+#left-side {
+    text-align: left;
+    line-height: 130%;
+}
+
+#right-side {
+    text-align: left;
+    line-height: 130%;
+}
+
+.total {
+    width: 100%;
+}
+
+.price-tbl {
+    float: right;
+    width: 40%;
+    border-collapse: collapse;
+}
+
+.bill-footer {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+    font-family: monospace;
+    font-size: 16px;
+    padding: 10px 0;
+}
+
+.bill-footer::before {
+    content: "=========================================================================================================================================================================================";
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.bill-footer span {
+    display: block;
+    position: relative;
+    z-index: 1;
+    background: #ddabab;
+    padding: 0 10px;
+    margin-top: 10px;
+}
+
+.pay-btn {
+    border: 1px solid;
+    border-radius: 50px;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background-color: #218838;
+}
