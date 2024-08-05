@@ -37,8 +37,21 @@ export function getAllAppointments() {
   return Appointments;
 }
 
-export function updateAppointment(index, updatedAppointment) {
-  Appointments[index] = updatedAppointment;
+export async function updateAppointment(appId, updatedAppointment) {
+  try {
+    const response = await fetch(`${backendUrl}/${appId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedAppointment),
+    });
+    if (!response.ok) throw new Error("Failed to update appointment");
+    const appointment = await response.json();
+    return appointment;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export function deleteAppointment(index) {

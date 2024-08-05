@@ -98,19 +98,19 @@ $("#appo-add").click(async function () {
   }
 });
 
-$("#appo-update").click(function () {
+$("#appo-update").click(async function () {
   const appId = $("#app-id").val();
 
-  const index = getAllAppointments().findIndex(
+  const index = (await getAllAppointments()).findIndex(
     (appointment) => appointment.appId === appId
   );
 
   if (index !== -1) {
     const updatedAppointment = {
       appId: appId,
-      adminId: $("#app-admin-id").val(),
-      name: $("#app-cus-name").val(),
-      mobile: $("#app-cus-mobile").val(),
+      admId: $("#app-admin-id").val(),
+      cusName: $("#app-cus-name").val(),
+      cusMobile: $("#app-cus-mobile").val(),
       dateTime: $("#app-date-time").val(),
     };
 
@@ -121,11 +121,11 @@ $("#appo-update").click(function () {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willUpdate) => {
+      }).then(async (willUpdate) => {
         if (willUpdate) {
-          updateAppointment(index, updatedAppointment);
+          await updateAppointment(appId, updatedAppointment);
           updateTable(index, updatedAppointment);
-          swal("Confirmation! Your appointment details has been updated!", {
+          swal("Confirmation! Your appointment details have been updated!", {
             icon: "success",
           });
         }
