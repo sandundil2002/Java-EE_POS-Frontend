@@ -147,18 +147,18 @@ function updateTable(index, updatedAppointment) {
   row.find("td").eq(4).text(updatedAppointment.dateTime);
 }
 
-$("#appo-search").click(function () {
+$("#appo-search").click(async function () {
   const appId = $("#app-id").val();
 
-  const index = getAllAppointments().findIndex(
+  const index = (await getAllAppointments()).findIndex(
     (appointment) => appointment.appId === appId
   );
 
   if (index !== -1) {
-    const appointment = getAllAppointments()[index];
-    $("#app-admin-id").val(appointment.adminId);
-    $("#app-cus-name").val(appointment.name);
-    $("#app-cus-mobile").val(appointment.mobile);
+    const appointment = (await getAllAppointments())[index];
+    $("#app-admin-id").val(appointment.admId);
+    $("#app-cus-name").val(appointment.cusName);
+    $("#app-cus-mobile").val(appointment.cusMobile);
     $("#app-date-time").val(appointment.dateTime);
   } else {
     swal("Information!", "Appointment Not Found!", "info");
