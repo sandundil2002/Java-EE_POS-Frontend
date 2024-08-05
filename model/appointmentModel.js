@@ -33,12 +33,22 @@ export async function addAppointment(
   }
 }
 
-export function getAllAppointments() {
-  return Appointments;
+export async function getAllAppointments() {
+  try {
+    const response = await fetch(backendUrl);
+    if (!response.ok) throw new Error("Failed to fetch appointments");
+    const appointments = await response.json();
+    console.log(appointments);
+    return appointments;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 export async function updateAppointment(appId, updatedAppointment) {
   try {
+    console.log(JSON.stringify(updatedAppointment));
     const response = await fetch(`${backendUrl}/${appId}`, {
       method: "PUT",
       headers: {
@@ -46,11 +56,17 @@ export async function updateAppointment(appId, updatedAppointment) {
       },
       body: JSON.stringify(updatedAppointment),
     });
-    if (!response.ok) throw new Error("Failed to update appointment");
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update appointment: ${errorText}`);
+    }
+
     const appointment = await response.json();
     return appointment;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 

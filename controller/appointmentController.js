@@ -6,8 +6,9 @@ import {
   validateAppointment,
 } from "../model/appointmentModel.js";
 
-$(document).ready(function () {
-  loadAllAppointments(getAllAppointments());
+$(document).ready(async function () {
+  const appointments = await getAllAppointments();
+  loadAllAppointments(appointments);
 });
 
 function generateAppointmentID() {
@@ -33,9 +34,9 @@ function loadAllAppointments(appointments) {
   appointments.forEach((appointment) => {
     const row = `<tr>
       <td>${appointment.appId}</td>
-      <td>${appointment.adminId}</td>
-      <td>${appointment.name}</td>
-      <td>${appointment.mobile}</td>
+      <td>${appointment.admId}</td>
+      <td>${appointment.cusName}</td>
+      <td>${appointment.cusMobile}</td>
       <td>${appointment.dateTime}</td>
       <td>
         <select name="Status" class="status-combo">
@@ -107,7 +108,6 @@ $("#appo-update").click(async function () {
 
   if (index !== -1) {
     const updatedAppointment = {
-      appId: appId,
       admId: $("#app-admin-id").val(),
       cusName: $("#app-cus-name").val(),
       cusMobile: $("#app-cus-mobile").val(),
