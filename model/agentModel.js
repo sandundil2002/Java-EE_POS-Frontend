@@ -75,8 +75,16 @@ export async function updateAgent(supId, updatedAgent) {
   }
 }
 
-export function deleteAgent(index) {
-  Agents.splice(index, 1);
+export async function deleteAgent(supId) {
+  try {
+    const response = await fetch(`${backendUrl}/${supId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Failed to delete agent");
+  } catch (error) {
+    console.error("Error deleting agent:", error);
+  }
 }
 
 export function validateAgent(agent) {

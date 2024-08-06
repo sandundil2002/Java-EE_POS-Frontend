@@ -165,10 +165,11 @@ $("#age-search").click(async function () {
   }
 });
 
-$("#age-delete").click(function () {
-  const ageId = $("#age-id").val();
+$("#age-delete").click(async function () {
+  const supId = $("#age-id").val();
+  const { agents } = await getAllAgents();
 
-  const index = getAllAgents().findIndex((agent) => agent.ageId === ageId);
+  const index = agents.findIndex((agent) => agent.supId === supId);
 
   if (index !== -1) {
     swal({
@@ -177,12 +178,11 @@ $("#age-delete").click(function () {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        deleteAgent(index);
-        const tbody = $("#age-tbl");
-        tbody.empty();
-        loadAllAgents(getAllAgents());
+        await deleteAgent(supId);
+        const { agents } = await getAllAgents();
+        loadAllAgents(agents);
         swal("Confirmation! Your supplier has been deleted!", {
           icon: "success",
         });
