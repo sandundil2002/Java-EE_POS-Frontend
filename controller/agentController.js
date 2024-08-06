@@ -147,6 +147,24 @@ $("#age-update").click(async function () {
   }
 });
 
+$("#age-search").click(async function () {
+  const supId = $("#age-id").val();
+  const { agents } = await getAllAgents();
+
+  const index = agents.findIndex((agent) => agent.supId === supId);
+
+  if (index !== -1) {
+    const agent = agents[index];
+    $("#age-adm-id").val(agent.admId);
+    $("#age-name").val(agent.name);
+    $("#age-address").val(agent.address);
+    $("#age-mobile").val(agent.mobile);
+    $("#age-email").val(agent.email);
+  } else {
+    swal("Information!", "Supplier Not Found!", "info");
+  }
+});
+
 $("#age-delete").click(function () {
   const ageId = $("#age-id").val();
 
