@@ -110,14 +110,15 @@ $("#age-add").click(async function () {
   } 
 });
 
-$("#age-update").click(function () {
-  const ageId = $("#age-id").val();
+$("#age-update").click(async function () {
+  const supId = $("#age-id").val();
+  const { suppliers } = await getAllAgents();
 
-  const index = getAllAgents().findIndex((agent) => agent.ageId === ageId);
+  const index = suppliers.findIndex((agent) => agent.supId === supId);
 
   if (index !== -1) {
     const updatedAgent = {
-      ageId: ageId,
+      supId: supId,
       admId: $("#age-adm-id").val(),
       name: $("#age-name").val(),
       address: $("age-address").val(),
@@ -132,10 +133,9 @@ $("#age-update").click(function () {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willUpdate) => {
+      }).then(async (willUpdate) => {
         if (willUpdate) {
-          updateAgent(index, updatedAgent);
-          updateTable(index, updatedAgent);
+          await updateAgent(index, updatedAgent);
           swal("Confirmation! Your supplier details has been updated!", {
             icon: "success",
           });
@@ -144,23 +144,6 @@ $("#age-update").click(function () {
     } else {
       swal("Information!", "Supplier Not Found!", "info");
     }
-  }
-});
-
-$("#age-search").click(function () {
-  const ageId = $("#age-id").val();
-
-  const index = getAllAgents().findIndex((agent) => agent.ageId === ageId);
-
-  if (index !== -1) {
-    const agent = getAllAgents()[index];
-    $("#age-adm-id").val(agent.admId.trim());
-    $("#age-name").val(agent.ageName.trim());
-    $("#age-address").val(agent.ageAddress.trim());
-    $("#age-mobile").val(agent.ageMobile.trim());
-    $("#age-email").val(agent.ageEmail.trim());
-  } else {
-    swal("Information!", "Supplier Not Found!", "info");
   }
 });
 

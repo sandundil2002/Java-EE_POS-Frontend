@@ -10,9 +10,6 @@ export async function getAllAgents() {
     const agents = data.suppliers;
     const adminIds = data.adminIds;
 
-    console.log("Agents:", agents);
-    console.log("Admin IDs:", adminIds);
-
     return { agents, adminIds };
   } catch (error) {
     console.error("Error fetching agents:", error);
@@ -55,8 +52,27 @@ export async function addAgent(
   }
 }
 
-export function updateAgent(index, updatedAgent) {
-  Agents[index] = updatedAgent;
+export async function updateAgent(supId, updatedAgent) {
+  try {
+    const response = await fetch(`${backendUrl}/${supId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedAgent),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error("Failed to update agent");
+    }
+
+    const agent = await response.json();
+    return agent;
+  } catch (error) {
+    console.error("Error updating agent:", error);
+    throw error;
+  }
 }
 
 export function deleteAgent(index) {
