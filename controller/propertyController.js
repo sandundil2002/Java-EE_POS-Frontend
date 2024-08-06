@@ -55,7 +55,7 @@ function loadAllProperties(properties) {
   properties.forEach((properties) => {
     const row = `<tr>
       <td>${properties.proId}</td>
-      <td>${properties.ageId}</td>
+      <td>${properties.supId}</td>
       <td>${properties.type}</td>
       <td>${properties.address}</td>
       <td>${properties.price}</td>
@@ -94,27 +94,19 @@ function reloadTable(propertyArray) {
   );
 }
 
-$("#pro-add").click(function () {
+$("#pro-add").click(async function () {
   const proId = $("#pro-id").val();
-  const ageId = $("#pro-age-id").val();
+  const supId = $("#pro-age-id").val();
   const type = $("#property-type").val();
-  const proAddress = $("#pro-address").val();
+  const address = $("#pro-address").val();
   const price = $("#price").val();
   const perches = $("#perches").val();
   const status = "Available";
 
-  const propertyArray = [
-    proId,
-    ageId,
-    type,
-    proAddress,
-    price,
-    perches,
-    status,
-  ];
+  const propertyArray = [proId, supId, type, address, price, perches, status];
 
   if (checkValidation()) {
-    addProperty(proId, ageId, type, proAddress, price, perches, status);
+    await addProperty(proId, supId, type, address, price, perches, status);
     reloadTable(propertyArray);
     setPropertyID();
     swal("Confirmation!", "New Property Added Successful!", "success");

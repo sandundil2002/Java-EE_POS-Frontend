@@ -48,7 +48,6 @@ export async function addAgent(
     return supplier;
   } catch (error) {
     console.error("Error adding agent:", error);
-    
   }
 }
 

@@ -16,25 +16,40 @@ export async function getAllProperties() {
   }
 }
 
-export function addProperty(
+export async function addProperty(
   proId,
-  ageId,
+  supId,
   type,
-  proAddress,
+  address,
   price,
   perches,
   status
 ) {
   const newProperty = {
     proId: proId,
-    ageId: ageId,
+    supId: supId,
     type: type,
-    proAddress: proAddress,
+    address: address,
     price: price,
     perches: perches,
     status: status,
   };
-  Properties.push(newProperty);
+
+  try {
+    const response = fetch(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProperty),
+    });
+
+    if (!response.ok) throw new Error(`Failed to add property`);
+    const property = await response.json();
+    return property;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export function updateProperty(index, updatedProperty) {
