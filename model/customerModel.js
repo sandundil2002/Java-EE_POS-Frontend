@@ -4,13 +4,19 @@ const backendUrl =
 export async function getAllCustomers() {
   try {
     const response = await fetch(backendUrl);
-    if (!response.ok) throw new Error("Failed to fetch customers");
-    const customers = await response.json();
-    console.log(customers);
-    return customers;
+    if (!response.ok)
+      throw new Error("Failed to fetch customers and appointment IDs.");
+
+    const data = await response.json();
+    const { customers, appointments } = data;
+
+    console.log("Customers:", customers);
+    console.log("Appointment IDs:", appointments);
+
+    return { customers, appointments };
   } catch (error) {
     console.error(error);
-    return [];
+    return { customers: [], appointments: [] };
   }
 }
 

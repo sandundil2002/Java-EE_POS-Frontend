@@ -7,8 +7,9 @@ import {
 } from "../model/appointmentModel.js";
 
 $(document).ready(async function () {
-  const appointments = await getAllAppointments();
-  loadAllAppointments(appointments);
+  const data = await getAllAppointments();
+  loadAllAppointments(data.appointments);
+  loadAdminIds(data.adminIds);
   setAppointmentID();
 });
 
@@ -55,6 +56,15 @@ function loadAllAppointments(appointments) {
       </td>
     </tr>`;
     tbody.append(row);
+  });
+}
+
+function loadAdminIds(adminIds) {
+  const adminIdSelect = $("#app-admin-id");
+
+  adminIds.forEach((adminId) => {
+    const option = `<option value="${adminId}">${adminId}</option>`;
+    adminIdSelect.append(option);
   });
 }
 

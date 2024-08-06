@@ -36,13 +36,19 @@ export async function addAppointment(
 export async function getAllAppointments() {
   try {
     const response = await fetch(backendUrl);
-    if (!response.ok) throw new Error("Failed to fetch appointments");
-    const appointments = await response.json();
-    console.log(appointments);
-    return appointments;
+    if (!response.ok)
+      throw new Error("Failed to fetch appointments and admin IDs");
+
+    const data = await response.json();
+    const { appointments, adminIds } = data;
+
+    console.log("Appointments:", appointments);
+    console.log("Admin IDs:", adminIds);
+
+    return { appointments, adminIds };
   } catch (error) {
     console.error(error);
-    return [];
+    return { appointments: [], adminIds: [] };
   }
 }
 

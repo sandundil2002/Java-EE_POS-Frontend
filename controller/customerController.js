@@ -7,8 +7,9 @@ import {
 } from "../model/customerModel.js";
 
 $(document).ready(async function () {
-  const customers = await getAllCustomers();
-  loadAllCustomers(customers);
+  const data = await getAllCustomers();
+  loadAllCustomers(data.customers);
+  loadAllAppointmentIds(data.appointments);
   setCustomerID();
 });
 
@@ -49,6 +50,15 @@ function loadAllCustomers(customers) {
       <td>${customer.email}</td>
     </tr>`;
     tbody.append(row);
+  });
+}
+
+function loadAllAppointmentIds(appointmentIds) {
+  const appointmentIdSelect = $("#cus-app-id");
+
+  appointmentIds.forEach((appointmentId) => {
+    const option = `<option value="${appointmentId}">${appointmentId}</option>`;
+    appointmentIdSelect.append(option);
   });
 }
 
