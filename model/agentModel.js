@@ -1,7 +1,23 @@
-import { Agents } from "../db/db.js";
+const backendUrl =
+  "http://localhost:8080/Elite_Real_Estate_POS_Backend_war_exploded/supplier";
 
-export function getAllAgents() {
-  return Agents;
+export async function getAllAgents() {
+  try {
+    const response = await fetch(backendUrl);
+    if (!response.ok) throw new Error("Failed to fetch agents");
+
+    const data = await response.json();
+    const agents = data.suppliers;
+    const adminIds = data.adminIds;
+
+    console.log("Agents:", agents);
+    console.log("Admin IDs:", adminIds);
+
+    return { agents, adminIds };
+  } catch (error) {
+    console.error("Error fetching agents:", error);
+    return { agents: [], adminIds: [] };
+  }
 }
 
 export function addAgent(

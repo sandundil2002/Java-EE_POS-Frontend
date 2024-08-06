@@ -10,7 +10,6 @@ $(document).ready(async function () {
   const { customers, appointmentIds } = await getAllCustomers();
   loadAllCustomers(customers);
   loadAllAppointmentIds(appointmentIds);
-  console.log(appointmentIds);
   setCustomerID();
 });
 

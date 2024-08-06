@@ -1,24 +1,36 @@
 import {
+  getAllAgents,
   addAgent,
   updateAgent,
   deleteAgent,
-  getAllAgents,
   validateAgent,
 } from "../model/agentModel.js";
 
-$(document).ready(function () {
-  loadAllAgents(getAllAgents());
+$(document).ready(async function () {
+  const { agents, adminIds } = await getAllAgents();
+  loadAllAgents(agents);
+  loadAdminIds(adminIds);
+  console.log(agents);
+  console.log(adminIds);  
+  setAgentID();
 });
 
 function generateAgentID() {
-  let lastID = $("#age-id").val();
+  const tbody = $("#age-tbl");
+  const rows = tbody.find("tr");
+  let lastID = "S000";
 
-  if (!lastID) {
-    lastID = "S000";
-  }
+  rows.each(function () {
+    const idCell = $(this).find("td").eq(0).text();
+    if (idCell.startsWith("S")) {
+      const currentID = idCell.slice(1);
+      if (parseInt(currentID) > parseInt(lastID.slice(1))) {
+        lastID = idCell;
+      }
+    }
+  });
 
   let newID = "S" + (parseInt(lastID.slice(1)) + 1).toString().padStart(3, "0");
-  localStorage.setItem("lastAgeID", newID);
   return newID;
 }
 
@@ -29,17 +41,27 @@ function setAgentID() {
 
 function loadAllAgents(agents) {
   const tbody = $("#age-tbl");
+  tbody.empty();
 
   agents.forEach((agent) => {
     const row = `<tr>
-      <td>${agent.ageId}</td>
+      <td>${agent.supId}</td>
       <td>${agent.admId}</td>
-      <td>${agent.ageName}</td>
-      <td>${agent.ageAddress}</td>
-      <td>${agent.ageMobile}</td>
-      <td>${agent.ageEmail}</td>
+      <td>${agent.name}</td>
+      <td>${agent.address}</td>
+      <td>${agent.mobile}</td>
+      <td>${agent.email}</td>
     </tr>`;
     tbody.append(row);
+  });
+}
+
+function loadAdminIds(adminIds) {
+  const adminIdSelect = $("#age-adm-id");
+
+  adminIds.forEach((adminId) => {
+    const option = `<option value="${adminId}">${adminId}</option>`;
+    adminIdSelect.append(option);
   });
 }
 
@@ -66,18 +88,6 @@ function reloadTable(agentArray) {
       "</td>" +
       "</tr>"
   );
-}
-
-function updateTable(index, updatedAgent) {
-  const tableBody = $("#age-tbl");
-  const row = tableBody.find("tr").eq(index);
-
-  row.find("td").eq(0).text(updatedAgent.ageId);
-  row.find("td").eq(1).text(updatedAgent.admId);
-  row.find("td").eq(2).text(updatedAgent.name);
-  row.find("td").eq(3).text(updatedAgent.address);
-  row.find("td").eq(4).text(updatedAgent.mobile);
-  row.find("td").eq(5).text(updatedAgent.email);
 }
 
 $("#age-add").click(function () {

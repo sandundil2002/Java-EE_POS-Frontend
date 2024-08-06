@@ -8,8 +8,7 @@ export async function getAllCustomers() {
       throw new Error("Failed to fetch customers and appointment IDs.");
 
     const data = await response.json();
-    console.log("Response data:", data);
-
+    
     const customers = data.customers;
     const appointmentIds = data.appointments;
 
