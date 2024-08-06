@@ -20,23 +20,39 @@ export async function getAllAgents() {
   }
 }
 
-export function addAgent(
-  ageId,
+export async function addAgent(
+  supId,
   admId,
-  ageName,
-  ageAddress,
-  ageMobile,
-  ageEmail
+  name,
+  address,
+  mobile,
+  email
 ) {
   const newAgent = {
-    ageId: ageId,
+    supId: supId,
     admId: admId,
-    ageName: ageName,
-    ageAddress: ageAddress,
-    ageMobile: ageMobile,
-    ageEmail: ageEmail,
+    name: name,
+    address: address,
+    mobile: mobile,
+    email: email,
   };
-  Agents.push(newAgent);
+
+  try {
+    const response = fetch(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAgent),
+    });
+
+    if (!response.ok) throw new Error("Failed to add agent");
+    const supplier = await response.json();
+    return supplier;
+  } catch (error) {
+    console.error("Error adding agent:", error);
+    
+  }
 }
 
 export function updateAgent(index, updatedAgent) {
@@ -52,7 +68,7 @@ export function validateAgent(agent) {
   const adminIdPattern = /^[A-Za-z0-9-]+$/;
   const namePattern = /^[A-Za-z\s]+$/;
   const addressPattern = /^[A-Za-z0-9\s,.'-]+$/;
-  const mobilePattern = /^\d{9}$/;
+  const mobilePattern = /^\d{10}$/;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const isAgentIdValid = ageIdPattern.test(agent.ageId);

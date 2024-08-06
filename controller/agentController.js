@@ -90,7 +90,7 @@ function reloadTable(agentArray) {
   );
 }
 
-$("#age-add").click(function () {
+$("#age-add").click(async function () {
   const agentArray = [
     $("#age-id").val(),
     $("#age-adm-id").val(),
@@ -100,14 +100,14 @@ $("#age-add").click(function () {
     $("#age-email").val(),
   ];
 
-  const [ageId, admId, ageName, ageAddress, ageMobile, ageEmail] = agentArray;
+  const [supId, admId, name, address, mobile, email] = agentArray;
 
   if (checkValidation()) {
-    addAgent(ageId, admId, ageName, ageAddress, ageMobile, ageEmail);
+    await addAgent(supId, admId, name, address, mobile, email);
     reloadTable(agentArray);
     setAgentID();
     swal("Confirmation!", "New Supplier Added Successful!", "success");
-  }
+  } 
 });
 
 $("#age-update").click(function () {
