@@ -76,7 +76,7 @@ export async function deleteAppointment(appId) {
     });
     if (!response.ok) throw new Error("Failed to delete appointment");
   } catch (error) {
-    console.error("catch error"+error);
+    console.error("catch error" + error);
   }
 }
 

@@ -1,34 +1,33 @@
 import {
   getAllCustomers,
-  getAllAppointments,
   addCustomer,
   updateCustomer,
   deleteCustomer,
   validateCustomer,
 } from "../model/customerModel.js";
 
-let foreignKeyInterval;
-
-$(document).ready(function () {
-  loadAllCustomers(getAllCustomers());
-  loadAppointmentIDs();
-  startForeignKeyLoad();
-
-  $("#cus-app-id").on("change", function () {
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
-  });
+$(document).ready(async function () {
+  const customers = await getAllCustomers();
+  loadAllCustomers(customers);
+  setCustomerID();
 });
 
 function generateCustomerID() {
-  let lastID = $("#cus-id").val();
+  const tbody = $("#cus-tbl");
+  const rows = tbody.find("tr");
+  let lastID = "C000";
 
-  if (!lastID) {
-    lastID = "C000";
-  }
+  rows.each(function () {
+    const idCell = $(this).find("td").eq(0).text();
+    if (idCell.startsWith("C")) {
+      const currentID = idCell.slice(1);
+      if (parseInt(currentID) > parseInt(lastID.slice(1))) {
+        lastID = idCell;
+      }
+    }
+  });
 
   let newID = "C" + (parseInt(lastID.slice(1)) + 1).toString().padStart(3, "0");
-  localStorage.setItem("lastCusID", newID);
   return newID;
 }
 
@@ -44,25 +43,12 @@ function loadAllCustomers(customers) {
     const row = `<tr>
       <td>${customer.cusId}</td>
       <td>${customer.appId}</td>
-      <td>${customer.cusName}</td>
+      <td>${customer.name}</td>
       <td>${customer.address}</td>
-      <td>${customer.cusMobile}</td>
-      <td>${customer.cusEmail}</td>
+      <td>${customer.mobile}</td>
+      <td>${customer.email}</td>
     </tr>`;
     tbody.append(row);
-  });
-}
-
-function loadAppointmentIDs() {
-  const appointments = getAllAppointments();
-  const selectElement = $("#cus-app-id");
-
-  selectElement.empty();
-  selectElement.append('<option value="">Appointment ID</option>');
-
-  appointments.forEach((appointment) => {
-    const option = `<option value="${appointment.appId}">${appointment.appId}</option>`;
-    selectElement.append(option);
   });
 }
 
@@ -225,12 +211,4 @@ function checkValidation() {
   };
 
   return validateCustomer(customer);
-}
-
-function startForeignKeyLoad() {
-  foreignKeyInterval = setInterval(loadAppointmentIDs, 1000);
-}
-
-function stopForeignKeyLoad() {
-  clearInterval(foreignKeyInterval);
 }

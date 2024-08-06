@@ -1,11 +1,17 @@
-import { Customers, Appointments } from "../db/db.js";
+const backendUrl =
+  "http://localhost:8080/Elite_Real_Estate_POS_Backend_war_exploded/customer";
 
-export function getAllAppointments() {
-  return Appointments;
-}
-
-export function getAllCustomers() {
-  return Customers;
+export async function getAllCustomers() {
+  try {
+    const response = await fetch(backendUrl);
+    if (!response.ok) throw new Error("Failed to fetch customers");
+    const customers = await response.json();
+    console.log(customers);
+    return customers;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 export function addCustomer(
