@@ -7,9 +7,10 @@ import {
 } from "../model/customerModel.js";
 
 $(document).ready(async function () {
-  const data = await getAllCustomers();
-  loadAllCustomers(data.customers);
-  loadAllAppointmentIds(data.appointments);
+  const { customers, appointmentIds } = await getAllCustomers();
+  loadAllCustomers(customers);
+  loadAllAppointmentIds(appointmentIds);
+  console.log(appointmentIds);
   setCustomerID();
 });
 
@@ -87,18 +88,6 @@ function reloadTable(customerArray) {
   );
 }
 
-function updateTable(index, updatedCustomer) {
-  const tableBody = $("#cus-tbl");
-  const row = tableBody.find("tr").eq(index);
-
-  row.find("td").eq(0).text(updatedCustomer.cusId);
-  row.find("td").eq(1).text(updatedCustomer.appId);
-  row.find("td").eq(2).text(updatedCustomer.name);
-  row.find("td").eq(3).text(updatedCustomer.address);
-  row.find("td").eq(4).text(updatedCustomer.mobile);
-  row.find("td").eq(5).text(updatedCustomer.email);
-}
-
 $("#cus-add").click(async function () {
   const customerArray = [
     $("#cus-id").val(),
@@ -119,34 +108,34 @@ $("#cus-add").click(async function () {
   }
 });
 
-$("#cus-update").click(function () {
+$("#cus-update").click(async function () {
   const cusId = $("#cus-id").val();
+  const { customers } = await getAllCustomers();
 
-  const index = getAllCustomers().findIndex(
+  const index = customers.findIndex(
     (customer) => customer.cusId === cusId
   );
 
-  if (index !== -1) {
+  if (index !== -1) {    
     const updatedCustomer = {
       cusId: cusId,
       appId: $("#cus-app-id").val(),
       name: $("#cus-name").val(),
-      address: $("cus-address").val(),
+      address: $("#cus-address").val(),
       mobile: $("#cus-mobile").val(),
       email: $("#cus-email").val(),
-    };
+    };    
 
-    if (checkValidation()) {
+    if (checkValidation()) {            
       swal({
         title: "Are you sure?",
         text: "Do you want to update this customer details!",
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willUpdate) => {
+      }).then(async (willUpdate) => {
         if (willUpdate) {
-          updateCustomer(index, updatedCustomer);
-          updateTable(index, updatedCustomer);
+          await updateCustomer(cusId, updatedCustomer);
           swal("Confirmation! Your customer details has been updated!", {
             icon: "success",
           });
@@ -213,10 +202,10 @@ function checkValidation() {
   const customer = {
     cusId: $("#cus-id").val(),
     appId: $("#cus-app-id").val(),
-    cusName: $("#cus-name").val(),
-    cusAddress: $("#cus-address").val(),
-    cusMobile: $("#cus-mobile").val(),
-    cusEmail: $("#cus-email").val(),
+    name: $("#cus-name").val(),
+    address: $("#cus-address").val(),
+    mobile: $("#cus-mobile").val(),
+    email: $("#cus-email").val(),
   };
 
   return validateCustomer(customer);

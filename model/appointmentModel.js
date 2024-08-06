@@ -42,9 +42,6 @@ export async function getAllAppointments() {
     const data = await response.json();
     const { appointments, adminIds } = data;
 
-    console.log("Appointments:", appointments);
-    console.log("Admin IDs:", adminIds);
-
     return { appointments, adminIds };
   } catch (error) {
     console.error(error);

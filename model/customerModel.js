@@ -8,17 +8,18 @@ export async function getAllCustomers() {
       throw new Error("Failed to fetch customers and appointment IDs.");
 
     const data = await response.json();
-    const { customers, appointments } = data;
+    console.log("Response data:", data);
 
-    console.log("Customers:", customers);
-    console.log("Appointment IDs:", appointments);
+    const customers = data.customers;
+    const appointmentIds = data.appointments;
 
-    return { customers, appointments };
+    return { customers, appointmentIds };
   } catch (error) {
     console.error(error);
-    return { customers: [], appointments: [] };
+    return { customers: [], appointmentIds: [] };
   }
 }
+
 
 export async function addCustomer(
   cusId,
@@ -54,8 +55,27 @@ export async function addCustomer(
   }
 }
 
-export function updateCustomer(index, updatedCustomer) {
-  Customers[index] = updatedCustomer;
+export async function updateCustomer(cusId, updatedCustomer) {
+  try {
+    const response = await fetch(`${backendUrl}/${cusId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedCustomer),
+    });
+
+    if (!response.ok){
+      const errorText = await response.text();
+      throw new Error(`Failed to update customer: ${errorText}`);
+    }
+
+    const customer = await response.json();
+    return customer;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export function deleteCustomer(index) {
@@ -72,10 +92,10 @@ export function validateCustomer(customer) {
 
   const isCusIdValid = cusIdPattern.test(customer.cusId);
   const isAppIdValid = appIdPattern.test(customer.appId);
-  const isCusNameValid = cusNamePattern.test(customer.cusName);
+  const isCusNameValid = cusNamePattern.test(customer.name);
   const isAddressValid = addressPattern.test(customer.address);
-  const isCusMobileValid = cusMobilePattern.test(customer.cusMobile);
-  const isEmailValid = emailPattern.test(customer.cusEmail);
+  const isCusMobileValid = cusMobilePattern.test(customer.mobile);
+  const isEmailValid = emailPattern.test(customer.email);
 
   if (!isCusIdValid) {
     swal({

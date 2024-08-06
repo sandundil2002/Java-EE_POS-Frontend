@@ -7,9 +7,9 @@ import {
 } from "../model/appointmentModel.js";
 
 $(document).ready(async function () {
-  const data = await getAllAppointments();
-  loadAllAppointments(data.appointments);
-  loadAdminIds(data.adminIds);
+  const { appointments, adminIds } = await getAllAppointments();
+  loadAllAppointments(appointments);
+  loadAdminIds(adminIds);
   setAppointmentID();
 });
 
@@ -118,8 +118,9 @@ $("#appo-add").click(async function () {
 
 $("#appo-update").click(async function () {
   const appId = $("#app-id").val();
+  const { appointments } = await getAllAppointments();
 
-  const index = (await getAllAppointments()).findIndex(
+  const index = appointments.findIndex(
     (appointment) => appointment.appId === appId
   );
 
@@ -155,13 +156,14 @@ $("#appo-update").click(async function () {
 
 $("#appo-search").click(async function () {
   const appId = $("#app-id").val();
+  const { appointments } = await getAllAppointments();
 
-  const index = (await getAllAppointments()).findIndex(
+  const index = appointments.findIndex(
     (appointment) => appointment.appId === appId
   );
 
   if (index !== -1) {
-    const appointment = (await getAllAppointments())[index];
+    const appointment = appointments[index];
     $("#app-admin-id").val(appointment.admId);
     $("#app-cus-name").val(appointment.cusName);
     $("#app-cus-mobile").val(appointment.cusMobile);
@@ -173,8 +175,9 @@ $("#appo-search").click(async function () {
 
 $("#appo-delete").click(async function () {
   const appId = $("#app-id").val();
+  const { appointments } = await getAllAppointments();
 
-  const index = (await getAllAppointments()).findIndex(
+  const index = appointments.findIndex(
     (appointment) => appointment.appId === appId
   );
 
@@ -188,9 +191,7 @@ $("#appo-delete").click(async function () {
     }).then(async (willDelete) => {
       if (willDelete) {
         await deleteAppointment(appId);
-        const tbody = $("#app-tbl");
-        tbody.empty();
-        const appointments = await getAllAppointments();
+        const { appointments } = await getAllAppointments();
         loadAllAppointments(appointments);
         swal("Confirmation! Your appointment has been deleted!", {
           icon: "success",
