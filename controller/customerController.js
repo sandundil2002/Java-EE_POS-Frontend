@@ -147,22 +147,21 @@ $("#cus-update").click(async function () {
   }
 });
 
-$("#cus-search").click(function () {
+$("#cus-search").click(async function () {
   const cusId = $("#cus-id").val();
+  const { customers } = await getAllCustomers();
 
-  const index = getAllCustomers().findIndex(
+  const index = customers.findIndex(
     (customer) => customer.cusId === cusId
   );
 
   if (index !== -1) {
-    const customer = getAllCustomers()[index];
-    $("#cus-app-id").val(customer.appId.trim());
-    $("#cus-name").val(customer.cusName.trim());
-    $("#cus-address").val(customer.address.trim());
-    $("#cus-mobile").val(customer.cusMobile.trim());
-    $("#cus-email").val(customer.cusEmail.trim());
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
+    const customer = customers[index];
+    $("#cus-app-id").val(customer.appId);
+    $("#cus-name").val(customer.name);
+    $("#cus-address").val(customer.address);
+    $("#cus-mobile").val(customer.mobile);
+    $("#cus-email").val(customer.email);
   } else {
     swal("Information!", "Customer Not Found!", "info");
   }
