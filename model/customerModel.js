@@ -78,8 +78,16 @@ export async function updateCustomer(cusId, updatedCustomer) {
   }
 }
 
-export function deleteCustomer(index) {
-  Customers.splice(index, 1);
+export async function deleteCustomer(cusId) {
+  try {
+    const response = await fetch(`${backendUrl}/${cusId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Failed to delete customer");
+  } catch (error) {
+    console.error(error);    
+  }
 }
 
 export function validateCustomer(customer) {

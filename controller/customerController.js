@@ -40,6 +40,7 @@ function setCustomerID() {
 
 function loadAllCustomers(customers) {
   const tbody = $("#cus-tbl");
+  tbody.empty();
 
   customers.forEach((customer) => {
     const row = `<tr>
@@ -167,10 +168,11 @@ $("#cus-search").click(async function () {
   }
 });
 
-$("#cus-delete").click(function () {
+$("#cus-delete").click(async function () {
   const cusId = $("#cus-id").val();
+  const { customers } = await getAllCustomers();
 
-  const index = getAllCustomers().findIndex(
+  const index = customers.findIndex(
     (customer) => customer.cusId === cusId
   );
 
@@ -181,12 +183,11 @@ $("#cus-delete").click(function () {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        deleteCustomer(index);
-        const tbody = $("#cus-tbl");
-        tbody.empty();
-        loadAllCustomers(getAllCustomers());
+        await deleteCustomer(cusId);
+        const { customers } = await getAllCustomers();
+        loadAllCustomers(customers);
         swal("Confirmation! Your customer has been deleted!", {
           icon: "success",
         });

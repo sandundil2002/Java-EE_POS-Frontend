@@ -77,6 +77,7 @@ export async function deleteAppointment(appId) {
     const response = await fetch(`${backendUrl}/${appId}`, {
       method: "DELETE",
     });
+    
     if (!response.ok) throw new Error("Failed to delete appointment");
   } catch (error) {
     console.error("catch error" + error);
