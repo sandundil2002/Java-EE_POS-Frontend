@@ -20,23 +20,38 @@ export async function getAllCustomers() {
   }
 }
 
-export function addCustomer(
+export async function addCustomer(
   cusId,
   appId,
-  cusName,
-  cusAddress,
-  cusMobile,
-  cusEmail
+  name,
+  address,
+  mobile,
+  email
 ) {
   const newCustomer = {
     cusId: cusId,
     appId: appId,
-    cusName: cusName,
-    cusAddress: cusAddress,
-    cusMobile: cusMobile,
-    cusEmail: cusEmail,
+    name: name,
+    address: address,
+    mobile: mobile,
+    email: email,
   };
-  Customers.push(newCustomer);
+
+  try {
+    const response = await fetch(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newCustomer),
+    });
+
+    if (!response.ok) throw new Error("Failed to add customer.");
+    const customer = await response.json();
+    return customer;
+  } catch (error) {
+    console.error(error);    
+  }
 }
 
 export function updateCustomer(index, updatedCustomer) {
@@ -52,7 +67,7 @@ export function validateCustomer(customer) {
   const appIdPattern = /^[A-Za-z0-9-]+$/;
   const cusNamePattern = /^[A-Za-z\s]+$/;
   const addressPattern = /^[A-Za-z0-9\s,.'-]+$/;
-  const cusMobilePattern = /^\d{9}$/;
+  const cusMobilePattern = /^\d{10}$/;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const isCusIdValid = cusIdPattern.test(customer.cusId);

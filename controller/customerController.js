@@ -99,7 +99,7 @@ function updateTable(index, updatedCustomer) {
   row.find("td").eq(5).text(updatedCustomer.email);
 }
 
-$("#cus-add").click(function () {
+$("#cus-add").click(async function () {
   const customerArray = [
     $("#cus-id").val(),
     $("#cus-app-id").val(),
@@ -109,11 +109,10 @@ $("#cus-add").click(function () {
     $("#cus-email").val(),
   ];
 
-  const [cusId, appId, cusName, cusAddress, cusMobile, cusEmail] =
-    customerArray;
+  const [cusId, appId, cusName, cusAddress, cusMobile, cusEmail] = customerArray;
 
   if (checkValidation()) {
-    addCustomer(cusId, appId, cusName, cusAddress, cusMobile, cusEmail);
+    await addCustomer(cusId, appId, cusName, cusAddress, cusMobile, cusEmail);
     reloadTable(customerArray);
     setCustomerID();
     swal("Confirmation!", "New Customer Added Successful!", "success");

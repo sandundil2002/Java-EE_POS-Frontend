@@ -107,7 +107,6 @@ $("#appo-add").click(async function () {
   ];
 
   const [appId, admId, cusName, cusMobile, dateTime] = appointmentArray;
-  console.log(appointmentArray);
 
   if (checkValidation()) {
     await addAppointment(appId, admId, cusName, cusMobile, dateTime);
