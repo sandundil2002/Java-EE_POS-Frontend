@@ -1,34 +1,36 @@
 import {
   getAllProperties,
-  getAllAgents,
   addProperty,
   updateProperty,
   deleteProperty,
   validateProperty,
 } from "../model/PropertyModel.js";
 
-let foreignKeyInterval;
-
-$(document).ready(function () {
-  loadAllProperties(getAllProperties());
-  loadAgentsIDs();
-  startForeignKeyLoad();
-
-  $("#pro-age-id").on("change", function () {
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
-  });
+$(document).ready(async function () {
+  const { properties, supplierIds } = await getAllProperties();
+  loadAllProperties(properties);
+  loadAgentsIDs(supplierIds);
+  console.log("properties", properties);
+  console.log("supplierIds", supplierIds);
+  setPropertyID();
 });
 
 function generatePropertyID() {
-  let lastID = $("#pro-id").val();
+  const tbody = $("#pro-tbl");
+  const rows = tbody.find("tr");
+  let lastID = "P000";
 
-  if (!lastID) {
-    lastID = "P000";
-  }
+  rows.each(function () {
+    const idCell = $(this).find("td").eq(0).text();
+    if (idCell.startsWith("P")) {
+      const currentID = idCell.slice(1);
+      if (parseInt(currentID) > parseInt(lastID.slice(1))) {
+        lastID = idCell;
+      }
+    }
+  });
 
   let newID = "P" + (parseInt(lastID.slice(1)) + 1).toString().padStart(3, "0");
-  localStorage.setItem("lastProID", newID);
   return newID;
 }
 
@@ -37,28 +39,25 @@ function setPropertyID() {
   $("#pro-id").val(newID);
 }
 
-function loadAgentsIDs() {
-  const agents = getAllAgents();
-  const selectElement = $("#pro-age-id");
+function loadAgentsIDs(supplierIds) {
+  const supIdSelect = $("#pro-age-id");
 
-  selectElement.empty();
-  selectElement.append('<option value="">Supplier ID</option>');
-
-  agents.forEach((agent) => {
-    const option = `<option value="${agent.ageId}">${agent.ageId}</option>`;
-    selectElement.append(option);
+  supplierIds.forEach((supplierId) => {
+    const option = `<option value="${supplierId}">${supplierId}</option>`;
+    supIdSelect.append(option);
   });
 }
 
 function loadAllProperties(properties) {
   const tbody = $("#pro-tbl");
+  tbody.empty();
 
   properties.forEach((properties) => {
     const row = `<tr>
       <td>${properties.proId}</td>
       <td>${properties.ageId}</td>
       <td>${properties.type}</td>
-      <td>${properties.proAddress}</td>
+      <td>${properties.address}</td>
       <td>${properties.price}</td>
       <td>${properties.perches}</td>
       <td>${properties.status}</td>
@@ -93,19 +92,6 @@ function reloadTable(propertyArray) {
       "</td>" +
       "</tr>"
   );
-}
-
-function updateTable(index, updatedProperty) {
-  const tableBody = $("#pro-tbl");
-  const row = tableBody.find("tr").eq(index);
-
-  row.find("td").eq(0).text(updatedProperty.proId);
-  row.find("td").eq(1).text(updatedProperty.ageId);
-  row.find("td").eq(2).text(updatedProperty.type);
-  row.find("td").eq(3).text(updatedProperty.proAddress);
-  row.find("td").eq(4).text(updatedProperty.price);
-  row.find("td").eq(5).text(updatedProperty.perches);
-  row.find("td").eq(6).text(updatedProperty.status);
 }
 
 $("#pro-add").click(function () {
@@ -235,14 +221,5 @@ function checkValidation() {
     price: $("#price").val(),
     perches: $("#perches").val(),
   };
-
   return validateProperty(property);
-}
-
-function startForeignKeyLoad() {
-  foreignKeyInterval = setInterval(loadAgentsIDs, 1000);
-}
-
-function stopForeignKeyLoad() {
-  clearInterval(foreignKeyInterval);
 }

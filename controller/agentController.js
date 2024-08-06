@@ -10,8 +10,6 @@ $(document).ready(async function () {
   const { agents, adminIds } = await getAllAgents();
   loadAllAgents(agents);
   loadAdminIds(adminIds);
-  console.log(agents);
-  console.log(adminIds);  
   setAgentID();
 });
 

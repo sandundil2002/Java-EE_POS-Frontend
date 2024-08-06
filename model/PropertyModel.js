@@ -1,11 +1,19 @@
-import { Properties, Agents } from "../db/db.js";
+const backendUrl =
+  "http://localhost:8080/Elite_Real_Estate_POS_Backend_war_exploded/property";
+export async function getAllProperties() {
+  try {
+    const response = await fetch(backendUrl);
+    if (!response.ok) throw new Error("Failed to fetch properties");
 
-export function getAllProperties() {
-  return Properties;
-}
+    const data = await response.json();
+    const properties = data.properties;
+    const supplierIds = data.supplierIds;
 
-export function getAllAgents() {
-  return Agents;
+    return { properties, supplierIds };
+  } catch (error) {
+    console.error(error);
+    return { properties: [], supplierIds: [] };    
+  }
 }
 
 export function addProperty(
