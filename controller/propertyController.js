@@ -175,10 +175,11 @@ $("#pro-search").click(async function () {
   }
 });
 
-$("#pro-delete").click(function () {
+$("#pro-delete").click(async function () {
   const proId = $("#pro-id").val();
+  const { properties } = await getAllProperties();
 
-  const index = getAllProperties().findIndex(
+  const index = properties.findIndex(
     (property) => property.proId === proId
   );
 
@@ -189,12 +190,11 @@ $("#pro-delete").click(function () {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        deleteProperty(index);
-        const tbody = $("#pro-tbl");
-        tbody.empty();
-        loadAllProperties(getAllProperties());
+        await deleteProperty(proId);
+        const { properties } = await getAllProperties();
+        loadAllProperties(properties);
         swal("Confirmation! Your property has been deleted!", {
           icon: "success",
         });

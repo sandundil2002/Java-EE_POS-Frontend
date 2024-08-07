@@ -74,7 +74,7 @@ export async function updateProperty(proId, updatedProperty) {
       }
       throw new Error(errorMessage);
     }
-    
+
     return;
   } catch (error) {
     console.error("Error updating property:", error);
@@ -82,8 +82,16 @@ export async function updateProperty(proId, updatedProperty) {
   }
 }
 
-export function deleteProperty(index) {
-  Properties.splice(index, 1);
+export async function deleteProperty(supId) {
+  try {
+    const response = await fetch(`${backendUrl}/${supId}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) throw new Error(`Failed to delete property`);
+  } catch (error) {
+    console.error(error);    
+  }
 }
 
 export function validateProperty(property) {
