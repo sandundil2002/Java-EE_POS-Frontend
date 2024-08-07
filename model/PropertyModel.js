@@ -52,8 +52,34 @@ export async function addProperty(
   }
 }
 
-export function updateProperty(index, updatedProperty) {
-  Properties[index] = updatedProperty;
+export async function updateProperty(proId, updatedProperty) {
+  try {
+    const response = await fetch(`${backendUrl}/${proId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProperty),
+    });
+
+    if (!response.ok) {
+      let errorMessage;
+      try {
+        const error = await response.json();
+        errorMessage = error.error || "Failed to update property";
+        console.error(error);
+      } catch (err) {
+        errorMessage = "Failed to update property";
+        console.error(err);
+      }
+      throw new Error(errorMessage);
+    }
+    
+    return;
+  } catch (error) {
+    console.error("Error updating property:", error);
+    throw error;
+  }
 }
 
 export function deleteProperty(index) {

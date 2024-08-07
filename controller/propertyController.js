@@ -113,19 +113,20 @@ $("#pro-add").click(async function () {
   }
 });
 
-$("#pro-update").click(function () {
+$("#pro-update").click(async function () {
   const proId = $("#pro-id").val();
+  const {properties} = await getAllProperties();
 
-  const index = getAllProperties().findIndex(
+  const index = properties.findIndex(
     (property) => property.proId === proId
   );
 
   if (index !== -1) {
     const updatedProperty = {
       proId: proId,
-      ageId: $("#pro-age-id").val(),
+      supId: $("#pro-age-id").val(),
       type: $("#property-type").val(),
-      proAddress: $("pro-address").val(),
+      address: $("#pro-address").val(),
       price: $("#price").val(),
       perches: $("#perches").val(),
       status: "Available",
@@ -138,10 +139,11 @@ $("#pro-update").click(function () {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willUpdate) => {
+      }).then(async (willUpdate) => {
         if (willUpdate) {
-          updateProperty(index, updatedProperty);
-          updateTable(index, updatedProperty);
+          await updateProperty(index, updatedProperty);
+            const { properties } = await getAllProperties();
+            loadAllProperties(properties);
           swal("Confirmation! Your property details has been updated!", {
             icon: "success",
           });
