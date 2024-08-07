@@ -1,23 +1,30 @@
-import { Payments, Properties, Customers, Appointments } from "../db/db.js";
+const backendUrl =
+  "http://localhost:8080/Elite_Real_Estate_POS_Backend_war_exploded/payment";
 
-export function getAllPayments() {
-  return Payments;
+export async function getAllPaymentDetails() {
+  try {
+    const response = await fetch(backendUrl);
+    if (!response.ok) throw new Error("Failed to fetch payments");
+
+    const data = await response.json();
+
+    const customers = data.customers;
+    const paymentId = data.paymentId;
+    const properties = data.properties;
+
+    console.log("paymentId", paymentId);
+    console.log("properties", properties);
+    console.log("customers", customers);    
+
+    return { customers, paymentId, properties };
+  } catch (error) {
+    console.error(error);
+    return { customers: [], paymentId: [], properties: [] };
+  }
 }
 
 export function addPayment(payment) {
   Payments.push(payment);
-}
-
-export function getAllProperties() {
-  return Properties;
-}
-
-export function getAllCustomers() {
-  return Customers;
-}
-
-export function getAllApointments() {
-  return Appointments;
 }
 
 export function updatePropertyStatus(proId, status) {

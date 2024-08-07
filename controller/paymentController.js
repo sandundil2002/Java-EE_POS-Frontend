@@ -1,30 +1,12 @@
-import {
-  getAllProperties,
-  getAllCustomers,
-  getAllApointments,
-  addPayment,
-  updatePropertyStatus,
-  updateAppointmentStatus,
-  findAppointmentIdByCustomerName,
-} from "../model/paymentModel.js";
+import { getAllPaymentDetails } from "../model/paymentModel.js";
 
-let proForeignKeyInterval;
-let cusForeignKeyInterval;
-
-$(document).ready(function () {
+$(document).ready(async function () {
   setLocalDateTime();
-  startForeignKeyLoad();
   setTimeout(setLocalDateTime(), 60000);
-
-  $("#pay-pro-id").on("change", function () {
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
-  });
-
-  $("#pay-cus-id").on("change", function () {
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
-  });
+  const { customers, paymentId, properties } = await getAllPaymentDetails();
+  setPaymentID(paymentId);
+  loadPropertyIDs(properties);
+  loadCustomerIDs(customers);
 });
 
 function setLocalDateTime() {
@@ -41,25 +23,11 @@ function setLocalDateTime() {
   document.getElementById("pay-date").value = formattedDateTime;
 }
 
-function generatePaymentID() {
-  let lastID = $("#pay-id").val();
-  let numericPart = parseInt(lastID.slice(1));
-  let newID = "O" + (numericPart + 1).toString().padStart(3, "0");
-  return newID;
+function setPaymentID(paymentId) {
+  $("#pay-id").val(paymentId);
 }
 
-function setPaymentID() {
-  const bug = 1;
-  if (bug === 1) {
-    const newID = generatePaymentID();
-    $("#pay-id").val(newID);
-    bug = 0;
-    return;
-  }
-}
-
-function loadPropertyIDs() {
-  const properties = getAllProperties();
+function loadPropertyIDs(properties) {
   const selectElement = $("#pay-pro-id");
   const priceInputElement = $("#pay-pro-price");
 
@@ -147,69 +115,13 @@ function loadPropertyIDs() {
           };
 
           addPayment(payment);
-
-          updatePropertyStatus(proId, "Not Available");
-          reloadPropertyTable(getAllProperties());
-          updateAppointmentStatus(
-            findAppointmentIdByCustomerName(cusName),
-            "Completed"
-          );
-          reloadAppointmentsTable(getAllApointments());
-          setPaymentID();
         }
       });
     }
   });
 }
 
-function reloadPropertyTable(properties) {
-  const tbody = $("#pro-tbl");
-  tbody.empty();
-  properties.forEach((properties) => {
-    const row = `<tr>
-      <td>${properties.proId}</td>
-      <td>${properties.ageId}</td>
-      <td>${properties.type}</td>
-      <td>${properties.proAddress}</td>
-      <td>${properties.price}</td>
-      <td>${properties.perches}</td>
-      <td>${properties.status}</td>
-    </tr>`;
-    tbody.append(row);
-  });
-}
-
-function reloadAppointmentsTable(appointments) {
-  const tbody = $("#app-tbl");
-  tbody.empty();
-
-  appointments.forEach((appointment) => {
-    const row = `<tr>
-          <td>${appointment.appId}</td>
-          <td>${appointment.adminId}</td>
-          <td>${appointment.name}</td>
-          <td>${appointment.mobile}</td>
-          <td>${appointment.dateTime}</td>
-          <td>
-            <select class="status-combo" data-id="${appointment.appId}">
-              <option value="Pending" class="pending" ${
-                appointment.status === "Pending" ? "selected" : ""
-              }>Pending</option>
-              <option value="Complete" class="complete"${
-                appointment.status === "Confirmed" ? "selected" : ""
-              }>Confirmed</option>
-              <option value="Cancel" class="cancel"${
-                appointment.status === "Completed" ? "selected" : ""
-              }>Completed</option>
-            </select>
-          </td>
-        </tr>`;
-    tbody.append(row);
-  });
-}
-
-function loadCustomerIDs() {
-  const customers = getAllCustomers();
+function loadCustomerIDs(customers) {
   const selectElement = $("#pay-cus-id");
   const cusInputElement = $("#pay-cus-name");
 
@@ -217,7 +129,7 @@ function loadCustomerIDs() {
   selectElement.append('<option value="">Customer ID</option>');
 
   customers.forEach((customer) => {
-    const option = `<option value="${customer.cusId}" data-name="${customer.cusName}"> ${customer.cusId}</option>`;
+    const option = `<option value="${customer.cusId}" data-name="${customer.name}"> ${customer.cusId}</option>`;
     selectElement.append(option);
   });
 
@@ -226,16 +138,6 @@ function loadCustomerIDs() {
     const customerName = selectedOption.data("name");
     cusInputElement.val(customerName);
   });
-}
-
-function startForeignKeyLoad() {
-  proForeignKeyInterval = setInterval(loadPropertyIDs, 1000);
-  cusForeignKeyInterval = setInterval(loadCustomerIDs, 1000);
-}
-
-function stopForeignKeyLoad() {
-  clearInterval(proForeignKeyInterval);
-  clearInterval(cusForeignKeyInterval);
 }
 
 $("#clear-btn").click(function () {
