@@ -1,4 +1,4 @@
-import { getAllPaymentDetails } from "../model/paymentModel.js";
+import { getAllPaymentDetails, addPayment } from "../model/paymentModel.js";
 
 $(document).ready(async function () {
   setLocalDateTime();
@@ -17,7 +17,6 @@ function setLocalDateTime() {
   const day = String(now.getDate()).padStart(2, "0");
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
-
   const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
 
   document.getElementById("pay-date").value = formattedDateTime;
@@ -45,8 +44,7 @@ function loadPropertyIDs(properties) {
     priceInputElement.val(propertyPrice);
   });
 
-  $("#pay-btn").click(function (event) {
-    event.preventDefault();
+  $("#pay-btn").click(async function () {
     const selectedOption = $("#pay-pro-id option:selected");
     const propertyPrice = selectedOption.data("price");
     const propertyType = selectedOption.data("type");
@@ -55,6 +53,7 @@ function loadPropertyIDs(properties) {
     const proId = selectedOption.val();
 
     const proPrice = $("#pay-pro-price").val();
+    const cusId = $("#pay-cus-id").val();
     const cusName = $("#pay-cus-name").val();
     const payId = $("#pay-id").val();
     const payMethod = $("#payment-method").val();
@@ -82,7 +81,7 @@ function loadPropertyIDs(properties) {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willTrue) => {
+      }).then(async (willTrue) => {
         if (willTrue) {
           swal("Confirmation! Property sell succesfull!", {
             icon: "success",
@@ -106,15 +105,14 @@ function loadPropertyIDs(properties) {
 
           const payment = {
             payId: payId,
-            cusName: cusName,
             proId: proId,
-            payMethod: payMethod,
-            date: date,
-            time: time,
-            total: total,
+            cusId: cusId,
+            proPrice: proPrice,
+            cusName: cusName,
+            method: payMethod,
           };
-
-          addPayment(payment);
+ 
+          await addPayment(payment);
         }
       });
     }

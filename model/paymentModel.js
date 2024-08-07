@@ -10,11 +10,7 @@ export async function getAllPaymentDetails() {
 
     const customers = data.customers;
     const paymentId = data.paymentId;
-    const properties = data.properties;
-
-    console.log("paymentId", paymentId);
-    console.log("properties", properties);
-    console.log("customers", customers);    
+    const properties = data.properties;  
 
     return { customers, paymentId, properties };
   } catch (error) {
@@ -23,21 +19,23 @@ export async function getAllPaymentDetails() {
   }
 }
 
-export function addPayment(payment) {
-  Payments.push(payment);
-}
+export async function addPayment(payments) {
+  console.log(payments);
+  
+  try {
+    const response = await fetch(backendUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payments),
+    });
 
-export function updatePropertyStatus(proId, status) {
-  const property = Properties.find((prop) => prop.proId === proId);
-  property.status = status;
-}
-
-export function updateAppointmentStatus(appId, status) {
-  const appointment = Appointments.find((appo) => appo.appId === appId);
-  appointment.status = status;
-}
-
-export function findAppointmentIdByCustomerName(customerName) {
-  const appointment = Appointments.find((appo) => appo.name === customerName);
-  return appointment.appId;
+    if (!response.ok) throw new Error("Failed to add payment");
+    const payment = await response.json();
+    return payment;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
