@@ -155,22 +155,21 @@ $("#pro-update").click(async function () {
   }
 });
 
-$("#pro-search").click(function () {
+$("#pro-search").click(async function () {
   const proId = $("#pro-id").val();
+  const { properties } = await getAllProperties();
 
-  const index = getAllProperties().findIndex(
+  const index = properties.findIndex(
     (property) => property.proId === proId
   );
 
   if (index !== -1) {
-    const property = getAllProperties()[index];
-    $("#pro-age-id").val(property.ageId.trim());
-    $("#property-type").val(property.type.trim());
-    $("#pro-address").val(property.proAddress.trim());
-    $("#price").val(property.price.trim());
-    $("#perches").val(property.perches.trim());
-    stopForeignKeyLoad();
-    setTimeout(startForeignKeyLoad, 20000);
+    const property = properties[index];
+    $("#pro-age-id").val(property.supId);
+    $("#property-type").val(property.type);
+    $("#pro-address").val(property.address);
+    $("#price").val(property.price);
+    $("#perches").val(property.perches);
   } else {
     swal("Information!", "Property Not Found!", "info");
   }
