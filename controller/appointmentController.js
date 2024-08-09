@@ -39,6 +39,7 @@ function setAppointmentID() {
 
 function loadAllAppointments(appointments) {
   const tbody = $("#app-tbl");
+  tbody.empty();
 
   appointments.forEach((appointment) => {
     const row = `<tr>
@@ -47,13 +48,7 @@ function loadAllAppointments(appointments) {
       <td>${appointment.cusName}</td>
       <td>${appointment.cusMobile}</td>
       <td>${appointment.dateTime}</td>
-      <td>
-        <select name="Status" class="status-combo">
-          <option value="pending" class="pending">Pending</option>
-          <option value="complete" class="complete">Complete</option>
-          <option value="cancel" class="cancel">Cancel</option>
-        </select>
-      </td>
+      <td>${appointment.status}</td>
     </tr>`;
     tbody.append(row);
   });
@@ -87,29 +82,25 @@ function reloadTable(appointmentArray) {
       appointmentArray[4] +
       "</td>" +
       "<td>" +
-      '<select name="Status" class="status-combo">' +
-      '<option value="pending" class="pending">Pending</option>' +
-      '<option value="complete" class="complete">Complete</option>' +
-      '<option value="cancel" class="cancel">Cancel</option>' +
-      "</select>" +
+      appointmentArray[5] +
       "</td>" +
       "</tr>"
   );
 }
 
 $("#appo-add").click(async function () {
-  const appointmentArray = [
-    $("#app-id").val(),
-    $("#app-admin-id").val(),
-    $("#app-cus-name").val(),
-    $("#app-cus-mobile").val(),
-    $("#app-date-time").val(),
-  ];
+    const appId = $("#app-id").val();
+    const admId = $("#app-admin-id").val();
+    const cusName = $("#app-cus-name").val();
+    const cusMobile = $("#app-cus-mobile").val();
+    const dateTime = $("#app-date-time").val();
+    const status = "Pending";
 
-  const [appId, admId, cusName, cusMobile, dateTime] = appointmentArray;
+    const appointmentArray = [appId, admId, cusName, cusMobile, dateTime, status];
+
 
   if (checkValidation()) {
-    await addAppointment(appId, admId, cusName, cusMobile, dateTime);
+    await addAppointment(appId, admId, cusName, cusMobile, dateTime, status);
     reloadTable(appointmentArray);
     setAppointmentID();
     swal("Confirmation!", "New Appointment Added Successful!", "success");
@@ -131,6 +122,7 @@ $("#appo-update").click(async function () {
       cusName: $("#app-cus-name").val(),
       cusMobile: $("#app-cus-mobile").val(),
       dateTime: $("#app-date-time").val(),
+      status: "Pending",
     };
 
     if (checkValidation()) {

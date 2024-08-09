@@ -19,7 +19,6 @@ export async function getAllCustomers() {
   }
 }
 
-
 export async function addCustomer(
   cusId,
   appId,

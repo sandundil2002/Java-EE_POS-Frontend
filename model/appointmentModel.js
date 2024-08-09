@@ -6,7 +6,8 @@ export async function addAppointment(
   admId,
   cusName,
   cusMobile,
-  dateTime
+  dateTime,
+  status
 ) {
   const newAppointment = {
     appId: appId,
@@ -14,6 +15,7 @@ export async function addAppointment(
     cusName: cusName,
     cusMobile: cusMobile,
     dateTime: dateTime,
+    status: status,
   };
 
   try {

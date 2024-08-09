@@ -10,8 +10,6 @@ $(document).ready(async function () {
   const { properties, supplierIds } = await getAllProperties();
   loadAllProperties(properties);
   loadAgentsIDs(supplierIds);
-  console.log("properties", properties);
-  console.log("supplierIds", supplierIds);
   setPropertyID();
 });
 

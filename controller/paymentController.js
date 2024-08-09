@@ -50,6 +50,7 @@ function loadPropertyIDs(properties) {
     const propertyType = selectedOption.data("type");
     const propertyPerches = selectedOption.data("perches");
     const propertyAddress = selectedOption.data("address");
+    
     const proId = selectedOption.val();
 
     const proPrice = $("#pay-pro-price").val();
